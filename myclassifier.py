@@ -8,8 +8,8 @@ from sklearn.model_selection import train_test_split,GridSearchCV
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, classification_report
 
-train_dir = 'C:\digital\Image_Processing\pet images\\train'
-test_dir = 'C:\digital\Image_Processing\pet images\\test'
+train_dir = 'Dataset/train'
+test_dir = 'Dataset/test'
 
 categories = ['cats','dogs']
 
@@ -107,12 +107,7 @@ def predict_image(image_path, model, categories):
         print(f"Error processing image {image_path}: {e}")
 
 
-predict_image('C:\digital\Image_Processing\pet images\test\cats\cat.4001.jpg', model, categories)
-predict_image('C:\digital\Image_Processing\pet images\test\cats\cat.4001.jpg', model, categories)
-predict_image(r'C:\digital\Image_Processing\pet images\test\cats\cat.4004.jpg', model, categories)
-
-
-# To loop through the xtest if needed
+# To loop through the xtest if needed else comment it
 for i in range(min(10, len(xtest))): 
     try:
         mypet = np.array(xtest[i]).reshape(50, 50)
