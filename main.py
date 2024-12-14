@@ -5,16 +5,15 @@ from Gaussian_Filter import denoise_image as gaussian_filter
 from Median_Filter import denoise_image as median_filter
 from Average_Filter import denoise_image as average_filter
 import tkinter as tk
+from tkinter import filedialog
 from tkinter import messagebox as mb
 
 root = tk.Tk()
 
 def get_image(path):
     if not path:
-        raise ValueError("The path cannot be empty.")
+        raise ValueError("Select an image first")
     img = cv2.imread(path)
-    if img is None:
-        raise FileNotFoundError(f"No image found at the path: {path}")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img
 
@@ -56,19 +55,32 @@ def interface():
 
     #add a heading
 
-    label = tk.Label(root, text='Image Denoising App', font=('JetBrains Mono', 26, 'bold'), bg='SaddleBrown', fg='white')
+    label = tk.Label(root, text='Image Denoising App', font=('JetBrains Mono', 28, 'bold'), bg='SaddleBrown', fg='white')
     label.pack(side=tk.TOP, fill=tk.X, pady=50)
 
-    label = tk.Label(root, text='Enter the path of the image:', font=('JetBrains Mono',16, 'bold'), bg='SaddleBrown', fg='white')
+    label = tk.Label(root, text='select image from your files', font=('JetBrains Mono',16, ), bg='SaddleBrown', fg='white')
     label.pack()
 
-    path = tk.Entry(root)
-    path.pack(pady=10)
+    # Add a button to select the image
+    path = tk.StringVar()
+    path.set('')
+
+    def on_select_image():
+        file_path = tk.filedialog.askopenfilename(filetypes=[("Image files", "*.jpg *.jpeg *.png *.bmp *.tiff")])
+        path.set(file_path)
+        if path.get():
+            mb.showinfo("Success", "Image selected successfully")
+        else:
+            mb.showerror("Error", "No image selected")
+
+    button = tk.Button(root, text='Select Image', command=on_select_image, height=1, width=12, fg='black', font=('JetBrains', 10, 'bold'))
+    button.pack(pady=10)
+
 
     space = tk.Label(root, text='', bg='SaddleBrown')
     space.pack()
 
-    label = tk.Label(root, text='Select the filter:', font=('JetBrains Mono',16, 'bold'), bg='SaddleBrown', fg='white')
+    label = tk.Label(root, text='Select the filter:', font=('JetBrains Mono',16,), bg='SaddleBrown', fg='white')
     label.pack()
 
 
@@ -88,7 +100,7 @@ def interface():
         except FileNotFoundError as fnfe:
             mb.showerror("Error", str(fnfe))
 
-    button = tk.Button(root, text='Process Image', command=on_process_image,height=1, width=20, fg='black', font=('JetBrains', 12, 'bold'))
+    button = tk.Button(root, text='Process Image', command=on_process_image,height=1, width=25, fg='black', font=('JetBrains', 14, 'bold'))
     button.pack(pady=30)
 
 
