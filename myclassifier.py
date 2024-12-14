@@ -8,63 +8,61 @@ from sklearn.model_selection import train_test_split,GridSearchCV
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, classification_report
 
-dir = 'pet images'
+train_dir = 'C:\digital\Image_Processing\pet images\\train'
+test_dir = 'C:\digital\Image_Processing\pet images\\test'
 
 categories = ['cats','dogs']
 
-data = []
 
 #------------------------First Step-----------------------------
 
-for category in categories:
-    path = os.path.join(dir,category)
-    label=categories.index(category)
+def load_images_from_folder(folder):
+    data = []
+    path = []
+    label =[]
     
-    for img in os.listdir(path):
-        imgpath = os.path.join(path,img)
-        pet_img=cv2.imread(imgpath,0)
-        try:
-            pet_img=cv2.resize(pet_img,(50,50))
-            image = np.array(pet_img).flatten()
-            data.append([image,label])
-        except Exception as e:
-            pass
+    for category in categories:
+        path = os.path.join(folder,category)
+        label=categories.index(category)
         
+        for img in os.listdir(path):
+            imgpath = os.path.join(path,img)
+            try:
+                pet_img=cv2.imread(imgpath,0)
+                pet_img=cv2.resize(pet_img,(50,50))
+                image = np.array(pet_img).flatten()
+                data.append([image,label])
+            except Exception as e:
+                pass
+    return data 
 
-pick_in=open('data1.pickle','wb')
-pickle.dump(data,pick_in)
-pick_in.close()
+
+train_data = load_images_from_folder(train_dir)
+test_data = load_images_from_folder(test_dir)
+
+random.shuffle(train_data)
+random.shuffle(test_data)
      
-     
-#------------------------Secound Step-----------------------------
-             
-pick_in=open('data1.pickle','rb')
-data = pickle.load(pick_in)
-pick_in.close()
-   
-random.shuffle(data)
-features = []
-labels = []
+#------------------------Secound Step: Split-----------------------------
+            
+# Split features and labels for training
+xtrain = np.array([item[0] for item in train_data]) / 255.0  # Normalize
+ytrain = np.array([item[1] for item in train_data])
 
-for feature,label in data:
-    features.append(feature)
-    labels.append(label)
-
-# Normalize features
-features = np.array(features) / 255.0  # Scale pixel values to [0, 1]
-
-# # Split Data
-xtrain,xtest,ytrain,ytest = train_test_split(features,labels,test_size = 0.2, random_state=42)
+# Split features and labels for testing
+xtest = np.array([item[0] for item in test_data]) / 255.0  # Normalize
+ytest = np.array([item[1] for item in test_data]) 
 
 
-# ------------------------Third Step: Train Model with Hyperparameter Tuning-----------------------------
+
+# ------------------------Third Step: Train Model-----------------------------
 param_grid = {
     'C': [0.1, 1, 10],
     'kernel': ['linear', 'poly', 'rbf'],
     'gamma': ['scale', 'auto']
 }
 
-grid = GridSearchCV(SVC(), param_grid, refit=True, verbose=2)
+grid = GridSearchCV(SVC(), param_grid, refit=True, verbose=0)
 grid.fit(xtrain, ytrain)
 
 model = grid.best_estimator_
@@ -77,25 +75,51 @@ pick.close()
 
 
 #------------------------Fourth Step-----------------------------
-
 pick = open('model.sav','rb')
 model = pickle.load(pick)
 pick.close()
 
-prediction = model.predict(xtest)
+predictions = model.predict(xtest)
 accuracy = model.score(xtest, ytest)
+print("Accuracy:", accuracy)
 
-# Evaluation metrics
-conf_matrix = confusion_matrix(ytest, prediction)
-class_report = classification_report(ytest, prediction, target_names=categories)
+# Show confusion matrix and classification report
+conf_matrix = confusion_matrix(ytest, predictions)
+class_report = classification_report(ytest, predictions, target_names=categories)
 
-print("Accuracy: ",accuracy)
+print("Confusion Matrix:\n", conf_matrix)
+print("Classification Report:\n", class_report)
+
+#------------------------Final Step: predict the image--------------------------------
+def predict_image(image_path, model, categories):
+    try:
+        pet_img = cv2.imread(image_path, 0)  # Load image in grayscale
+        pet_img = cv2.resize(pet_img, (50, 50)) 
+        image = np.array(pet_img).flatten() / 255.0  
+        prediction = model.predict([image])[0]  
+        print(f"Prediction for '{image_path}': {categories[prediction]}")
+        
+        # Show the image
+        plt.imshow(pet_img, cmap='gray')
+        plt.title(f"Prediction: {categories[prediction]}")
+        plt.show()
+    except Exception as e:
+        print(f"Error processing image {image_path}: {e}")
 
 
-for i in range(10): 
-    mypet = np.array(xtest[i]).reshape(50, 50)
-    plt.imshow(mypet, cmap='gray')
-    plt.title(f"Prediction: {categories[prediction[i]]}, True Label: {categories[ytest[i]]}")
-    plt.show()
-    # plt.pause(3)  
-    # plt.clf() 
+predict_image('C:\digital\Image_Processing\pet images\test\cats\cat.4001.jpg', model, categories)
+predict_image('C:\digital\Image_Processing\pet images\test\cats\cat.4001.jpg', model, categories)
+predict_image(r'C:\digital\Image_Processing\pet images\test\cats\cat.4004.jpg', model, categories)
+
+
+# To loop through the xtest if needed
+for i in range(min(10, len(xtest))): 
+    try:
+        mypet = np.array(xtest[i]).reshape(50, 50)
+        plt.imshow(mypet, cmap='gray')
+        plt.title(f"Prediction: {categories[predictions[i]]}, True Label: {categories[ytest[i]]}")
+        plt.show()
+        # plt.pause(3)  
+        # plt.clf() 
+    except Exception as e:
+        pass
