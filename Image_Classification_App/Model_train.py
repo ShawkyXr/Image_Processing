@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split,GridSearchCV
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, classification_report
 
-train_dir = '/home/hossam/work/Image_Processing/Image_Classification_App/Dataset/train'
+train_dir = 'Image_Classification_App/Dataset/train'
 categories = ['cats','dogs']
 
 
