@@ -6,6 +6,7 @@ from Median_Filter import denoise_image as median_filter
 from Average_Filter import denoise_image as average_filter
 import tkinter as tk
 from tkinter import messagebox as mb
+
 root = tk.Tk()
 
 def get_image(path):
@@ -17,6 +18,7 @@ def get_image(path):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img
 
+
 def load_filter(img, filter):
     if filter == 'Gaussian':
         denoised_img = gaussian_filter(img)
@@ -25,6 +27,7 @@ def load_filter(img, filter):
     elif filter == 'Average':
         denoised_img = average_filter(img)
     return denoised_img
+
 
 def show_image(img, original_img):
     # Display the original image
