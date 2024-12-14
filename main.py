@@ -53,21 +53,32 @@ def process_image(path, filter):
 
     
 def interface():
-    
-    label = tk.Label(root, text='Enter the path of the image:', bg='gray', fg='white')
+
+    #add a heading
+
+    label = tk.Label(root, text='Image Denoising App', font=('JetBrains Mono', 26, 'bold'), bg='SaddleBrown', fg='white')
+    label.pack(side=tk.TOP, fill=tk.X, pady=50)
+
+    label = tk.Label(root, text='Enter the path of the image:', font=('JetBrains Mono',16, 'bold'), bg='SaddleBrown', fg='white')
     label.pack()
 
     path = tk.Entry(root)
-    path.pack()
+    path.pack(pady=10)
 
-    label = tk.Label(root, text='Select the filter:', bg='gray', fg='white')
+    space = tk.Label(root, text='', bg='SaddleBrown')
+    space.pack()
+
+    label = tk.Label(root, text='Select the filter:', font=('JetBrains Mono',16, 'bold'), bg='SaddleBrown', fg='white')
     label.pack()
+
 
     filter = tk.StringVar()
     filter.set('Gaussian')
     filter_options = ['Gaussian', 'Median', 'Average']
     filter_menu = tk.OptionMenu(root, filter, *filter_options)
-    filter_menu.pack()
+    filter_menu.configure(background="white", activebackground="white")
+
+    filter_menu.pack(pady=10)
 
     def on_process_image():
         try:
@@ -77,15 +88,15 @@ def interface():
         except FileNotFoundError as fnfe:
             mb.showerror("Error", str(fnfe))
 
-    button = tk.Button(root, text='Process Image', command=on_process_image)
-    button.pack()
+    button = tk.Button(root, text='Process Image', command=on_process_image,height=1, width=20, fg='black', font=('JetBrains', 12, 'bold'))
+    button.pack(pady=30)
 
 
 
 def main():
     root.geometry('500x500')
     root.title('Image Denoising')
-    root.configure(bg='gray')
+    root.configure(bg= 'SaddleBrown')
 
     interface()
 
