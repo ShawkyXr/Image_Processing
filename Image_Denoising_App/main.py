@@ -30,7 +30,7 @@ def load_filter(img, filter):
 
 def show_image(img, original_img):
     # Display the original image
-    plt.figure(figsize=(15,10))
+    plt.figure(figsize=(8,5))
     plt.subplot(1, 2, 1)
     plt.title("Original Image")
     plt.imshow(original_img)
