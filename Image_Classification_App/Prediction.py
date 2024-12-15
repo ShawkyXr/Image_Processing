@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split,GridSearchCV
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, classification_report
 
-test_dir = '/home/hossam/work/Image_Processing/Image_Classification_App/Dataset/test'
+test_dir = 'Image_Classification_App/Dataset/test'
 
 categories = ['cats','dogs']
 
@@ -73,11 +73,6 @@ def predict_image(image_path,  categories):
     except Exception as e:
         print(f"Error processing image {image_path}: {e}")
 
-
-
-# predict_image('/home/hossam/work/Image_Processing/Image_Classification_App/Dataset/train/cats/cat.6.jpg', categories)
-# predict_image('C:\digital\Image_Processing\pet images\test\cats\cat.4001.jpg', model, categories)
-# predict_image(r'C:\digital\Image_Processing\pet images\test\cats\cat.4004.jpg', model, categories)
 
 
 # # To loop through the xtest if needed
