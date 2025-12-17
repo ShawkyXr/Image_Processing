@@ -1,88 +1,45 @@
-import os 
-import numpy as np
 import cv2
-import matplotlib.pyplot as plt
+import numpy as np
 import pickle
-import random
-from sklearn.model_selection import train_test_split,GridSearchCV
-from sklearn.svm import SVC
-from sklearn.metrics import confusion_matrix, classification_report
 
-test_dir = 'Image_Classification_App/Dataset/test'
+categories = ['cats', 'dogs']
 
-categories = ['cats','dogs']
+def preprocess_image(image_path):
+    pet_img = cv2.imread(image_path, 0)
+    pet_img = cv2.resize(pet_img, (50, 50))
+    image = np.array(pet_img).flatten() / 255.0
+    return image
 
+def predict_image_all_models(image_path):
+    image = preprocess_image(image_path)
 
-def predict_image(image_path,  categories):
-    
-
-    def load_images_from_folder(folder):
-        data = []
-        path = []
-        label =[]
-
-        for category in categories:
-            path = os.path.join(folder,category)
-            label=categories.index(category)
-            
-            for img in os.listdir(path):
-                imgpath = os.path.join(path,img)
-                try:
-                    pet_img=cv2.imread(imgpath,0)
-                    pet_img=cv2.resize(pet_img,(50,50))
-                    image = np.array(pet_img).flatten()
-                    data.append([image,label])
-                except Exception as e:
-                    pass
-        return data 
+    # SAME PATH LOGIC as original
+    models = {
+        "SVM": "models/svm_model.sav",
+        "KNN": "models/knn_model.sav",
+        "Decision Tree": "models/dt_model.sav"
+    }
 
 
-    test_data = load_images_from_folder(test_dir)
+    predictions = {}
 
-    random.shuffle(test_data)
-        
-    xtest = np.array([item[0] for item in test_data]) / 255.0  # Normalize
-    ytest = np.array([item[1] for item in test_data]) 
+    for name, path in models.items():
+        pick = open(path, 'rb')      # ← same logic
+        model = pickle.load(pick)
+        pick.close()
 
-    pick = open('model.sav','rb')
-    model = pickle.load(pick)
-    pick.close()
+        pred = model.predict([image])[0]
+        predictions[name] = categories[pred]
 
-    predictions = model.predict(xtest)
-    accuracy = model.score(xtest, ytest)
-    print("Accuracy:", accuracy)
+    return predictions
 
-    # Show confusion matrix and classification report
-    conf_matrix = confusion_matrix(ytest, predictions)
-    class_report = classification_report(ytest, predictions, target_names=categories)
+if __name__ == "__main__":
+    image_path = "test_image.jpg"  # same idea as before
 
-    print("Confusion Matrix:\n", conf_matrix)
-    print("Classification Report:\n", class_report)
+    results = predict_image_all_models(image_path)
 
-    try:
-        pet_img = cv2.imread(image_path, 0)  # Load image in grayscale
-        pet_img = cv2.resize(pet_img, (50, 50)) 
-        image = np.array(pet_img).flatten() / 255.0  
-        prediction = model.predict([image])[0]  
-        # print(f"Prediction for '{image_path}': {categories[prediction]}")
-        return categories[prediction] 
-        # Show the image
-        # plt.imshow(pet_img, cmap='gray')
-        # plt.title(f"Prediction: {categories[prediction]}")
-        # plt.show()
-    except Exception as e:
-        print(f"Error processing image {image_path}: {e}")
+    print(f"\nPredictions for: {image_path}")
+    print("-" * 40)
 
-
-
-# # To loop through the xtest if needed
-# for i in range(min(10, len(xtest))): 
-#     try:
-#         mypet = np.array(xtest[i]).reshape(50, 50)
-#         plt.imshow(mypet, cmap='gray')
-#         plt.title(f"Prediction: {categories[predictions[i]]}, True Label: {categories[ytest[i]]}")
-#         plt.show()
-#         # plt.pause(3)  
-#         # plt.clf() 
-#     except Exception as e:
-#         pass
+    for model, pred in results.items():
+        print(f"{model:<15}: {pred}")
