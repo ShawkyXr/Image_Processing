@@ -1,6 +1,6 @@
 from tkinter import Tk, Frame, Button, Label, filedialog
 from PIL import Image, ImageTk
-import Prediction  # your prediction file
+import Prediction  
 
 categories = ['cats', 'dogs']
 
@@ -89,12 +89,10 @@ class ImageClassificationApp:
             return
 
         try:
-            # 🔥 Predict using ALL models
             predictions = Prediction.predict_image_all_models(
                 self.selected_image_path
             )
 
-            # Format text for GUI
             result_text = ""
             for model, pred in predictions.items():
                 result_text += f"{model}: {pred}\n"

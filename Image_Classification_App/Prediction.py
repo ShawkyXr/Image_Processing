@@ -13,7 +13,6 @@ def preprocess_image(image_path):
 def predict_image_all_models(image_path):
     image = preprocess_image(image_path)
 
-    # SAME PATH LOGIC as original
     models = {
         "SVM": "models/svm_model.sav",
         "KNN": "models/knn_model.sav",
@@ -24,7 +23,7 @@ def predict_image_all_models(image_path):
     predictions = {}
 
     for name, path in models.items():
-        pick = open(path, 'rb')      # ← same logic
+        pick = open(path, 'rb')      
         model = pickle.load(pick)
         pick.close()
 
@@ -34,7 +33,7 @@ def predict_image_all_models(image_path):
     return predictions
 
 if __name__ == "__main__":
-    image_path = "test_image.jpg"  # same idea as before
+    image_path = "test_image.jpg"  
 
     results = predict_image_all_models(image_path)
 
