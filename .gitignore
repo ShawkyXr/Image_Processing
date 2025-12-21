@@ -24,8 +24,7 @@ share/python-wheels/
 *.egg
 MANIFEST
 perdiction
-*DataSet/
-images/
+**/*DataSet/  
 
 # Environments
 .env
