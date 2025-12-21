@@ -1,16 +1,19 @@
 import customtkinter as ctk
 import os
 
+def open_image_denoising_app():
+    os.system('python3 Image_Denoising_App/main.py')
+
 def open_image_classification_app():
     os.system('python3 Image_Classification_App/main.py')
 
 root = ctk.CTk()
-root.geometry("600x400")
+root.geometry("800x600")
 root.title('Image Processing App')
 
 header = ctk.CTkLabel(
             root,
-            text="Image Classification App",
+            text="Image Processing App",
             font=("JetBrains Mono", 30, "bold")
         )
 
@@ -20,14 +23,25 @@ content = ctk.CTkFrame(root, fg_color="transparent")
 content.pack(fill=ctk.BOTH, expand=True)
 
 button_frame = ctk.CTkFrame(content, fg_color="transparent")
-button_frame.pack(pady=20)
+button_frame.pack()
 
 bt_select = ctk.CTkButton(
             button_frame,
-            text="Start",
-            width=180,
-            height=45,
-            font=("JetBrains Mono", 13, "bold"),
+            text="Denoise Image",
+            width=300,
+            height=50,
+            font=("JetBrains Mono", 16, "bold"),
+            corner_radius=22,
+            command=open_image_denoising_app
+        )
+bt_select.pack(pady=30)
+
+bt_select = ctk.CTkButton(
+            button_frame,
+            text="Classify Cat/Dog Image",
+            width=300,
+            height=50,
+            font=("JetBrains Mono", 16, "bold"),
             corner_radius=22,
             command=open_image_classification_app
         )
