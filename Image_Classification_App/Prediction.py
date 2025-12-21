@@ -16,7 +16,7 @@ def preprocess_image(image_path):
 
 
 # ---------------- Load Test Dataset (for metrics) ----------------
-def load_test_data(test_folder="Dataset/test"):
+def load_test_data(test_folder="Image_Classification_App/Dataset/test"):
     X_test = []
     y_test = []
 
@@ -40,9 +40,9 @@ def predict_image_all_models(image_path):
     image = preprocess_image(image_path).reshape(1, -1)
 
     models = {
-        "SVM": "models/svm_model.sav",
-        "KNN": "models/knn_model.sav",
-        "Tree": "models/dt_model.sav"
+        "SVM": "Image_Classification_App/models/svm_model.sav",
+        "KNN": "Image_Classification_App/models/knn_model.sav",
+        "Tree": "Image_Classification_App/models/dt_model.sav"
     }
 
     # Load test data ONCE

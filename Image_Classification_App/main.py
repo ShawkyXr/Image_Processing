@@ -9,7 +9,7 @@ categories = ['cats', 'dogs']
 class ImageClassificationApp:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("800x600")
+        self.root.geometry("1000x600")
         self.root.title("Image Classification")
 
         # ---------------- Grid Config ----------------
