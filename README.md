@@ -1,153 +1,289 @@
-# Image Classification and Noise Reduction GUI APP
+# Image Classification and Noise Reduction GUI Application
 
- **Image Classification and Noise Reduction GUI python Application**
+**A Python-based GUI application for Image Noise Reduction and Image Classification (Cats vs Dogs).**
 
-## How to Get Started
+The application allows users to:
 
-### Prerequisities
-
-- Python 3.6 or higher
-- numpy
-- tkinter
-
-* sklearn
-* opencv-python
-
-* matplotlib
-
-## How to Install the required packages
-
-1. Create a virtual enviroment
-
-```
-$ python3 -m venv env
-```
-
-2. Activate the virtual environment
-
-```bash
-$ source env/bin/activate
-```
-
-3. Install the required packages
-
-```bash
-$ pip install -r requirements.txt
-```
-
-### How to run the app
-
-```bash
-$ python3 App.py
-```
-
-# Project Documentation: Image Compression Application
-
-## Overview
-
-This project implements an image Classification and Noise Reduction application with a graphical user interface (GUI) using tknter, it allows the user to view image and select the filter he want to use to Denoise it and it allow the user to insert a aphoto to predict wither it's a cat or a dog.
-
-- **App.py**: The main application that defines the GUI and handles user interactions and contain's tha main window.
-- **Image_Denoising_App/main.py**: The function witch control the whole Denoising Process.
-- **Median_Filter.py**: A utility to reduce noise in images using the Median Filter.
-- **Gaussian_Filter.py**: A utility to reduce noise in images using the Gaussian Filter.
-- **Average_Filter.py**: A utility to reduce noise in images using the Average Filter.
-- **Image_Classification_App/main.py**: The function witch control the whole Classification Process.
-- **Model_train.py**: A utility to Train a Model with up to 8000+ images.
-- **Prediction.py**: A utility to predicit a given images using the pretrained Model.
+* Apply multiple noise reduction filters to images
+* Classify images using multiple machine learning algorithms
+* Interact with a clean GUI built using `customtkinter`
 
 ---
 
-## `App.py`
+## How to Get Started
 
-This file implements the main application GUI using tknter.
+### Prerequisites
 
-# Main Functions
+* Python **3.6+**
+* Required libraries:
+  * `numpy`
+  * `tkinter`
+  * `customtkinter`
+  * `scikit-learn`
+  * `opencv-python`
+  * `matplotlib`
+  * `Pillow (PIL)`
+  * `pickle`
 
-## **Median Filter**
+---
 
-**Purpose:** Primarily used to remove salt-and-pepper noise from images.
+## Installation
 
-**Operation:**
+### 1. Create a virtual environment
 
-- The pixel value is replaced with the median of the values in its neighborhood.
-- This is a non-linear filter.
+```bash
+python3 -m venv env
+```
+
+### 2. Activate the virtual environment
+
+```bash
+source env/bin/activate
+```
+
+### 3. Install required packages
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Running the Application
+
+```bash
+python3 App.py
+```
+
+---
+
+# Project Documentation
+
+## Overview
+
+This project implements an **Image Processing GUI Application** that supports:
+
+* **Image Noise Reduction**
+* **Image Classification (Cat vs Dog)**
+
+The application integrates multiple classical image filters and multiple machine learning algorithms for classification.
+
+---
+
+## Project Structure
+
+```
+IMAGE_PROCESSING/
+├── Image_Classification_App/
+│   ├── models/
+│   ├── data_loader.py
+│   ├── decision_tree_model.py
+│   ├── knn_model.py
+│   ├── svm_model.py
+│   ├── Prediction.py
+│   └── main.py
+│
+├── Image_Denoising_App/
+│   ├── images/
+│   ├── Average_Filter.py
+│   ├── Gaussian_Filter.py
+│   ├── Median_Filter.py
+│   └── main.py
+│
+├── App.py
+├── README.md
+├── requirements.txt
+└── .gitignore
+
+```
+
+---
+
+# Noise Reduction Algorithms
+
+## Median Filter
+
+**Purpose:**
+Removes salt-and-pepper (impulse) noise.
+
+**How it works:**
+
+* Replaces each pixel with the median of neighboring pixels.
+* Non-linear filtering approach.
 
 **Strengths:**
 
-- Preserves edges effectively since it replaces outliers without blurring.
-- Robust against impulse noise.
+* Preserves edges effectively
+* Very robust against impulse noise
 
 **Weaknesses:**
 
-- Computationally intensive compared to linear filters.
-- Not ideal for Gaussian noise.
+* Computationally expensive
+* Less effective for Gaussian noise
 
-## **Average Filter (Mean Filter)**
+---
 
-**Purpose:** Used for general smoothing of images to reduce noise.
+## Average (Mean) Filter
 
-**Operation:**
+**Purpose:**
+General image smoothing.
 
-- The pixel value is replaced with the average of the values in its neighborhood.
-- This is a linear filter.
+**How it works:**
+
+* Replaces each pixel with the average of its neighborhood.
+* Linear filter.
 
 **Strengths:**
 
-- Simple and fast to compute.
-- Reduces random noise effectively.
+* Simple and fast
+* Reduces random noise
 
 **Weaknesses:**
 
-- Blurs edges and details.
-- Not effective at removing high-intensity noise like salt-and-pepper.
-- 
+* Blurs edges and fine details
+* Weak against salt-and-pepper noise
 
-## **Gaussian Filter**
+---
 
-**Purpose:** Used for smoothing while preserving important structural details in the image.
-**Operation:**
+## Gaussian Filter
 
-- The pixel value is computed using a weighted average where weights follow a Gaussian distribution.
-- This is a linear filter.
+**Purpose:**
+Smooths images while preserving structural details.
+
+**How it works:**
+
+* Uses a Gaussian-weighted average of neighboring pixels.
+* Linear filter.
 
 **Strengths:**
 
-- Provides a smoother result compared to an average filter.
-- Slightly more computationally intensive than the average filter.
+* Produces smoother results than the average filter
+* Better edge preservation
 
 **Weaknesses:**
 
-- Not effective at removing impulse noise like salt-and-pepper noise.
-- Not ideal for Gaussian noise.
+* Not suitable for impulse noise
+* Parameter tuning required (kernel size, sigma)
 
-## **Image Classification using SVM**
+---
 
-**Feature Extraction:**
+# Image Classification Algorithms
 
-- SVM require vectorized data as input, not war images;
-- ### **Extract features from images using techniques such as:**
+The application now supports **three machine learning algorithms** for image classification:
 
-  - Histogram of Oriented Gradients (HOG)
-  - SIFT (Scale-Invariant Feature Transform)
-  - ORB (Oriented FAST and Rotated BRIEF)
-  - Flattening pixel intensities (less common now).
+* **Support Vector Machine (SVM)**
+* **K-Nearest Neighbors (KNN)**
+* **Decision Tree (DTree)**
 
-## **Dataset Preperation:**
+---
 
-- Prepare a dataset with labeled images.
-- Split the data into training and testing sets.
+## Feature Extraction
 
-## **Training SVM:**
+All classifiers require numerical feature vectors, not raw images.
 
-- Use the extracted feature vectors as input to train the SVM model.
-- ### **Optimize hyperparameters such as:**
+Supported feature extraction techniques include:
 
-  - **Kernel**: Linear, RBF (Radial Basis Function), or Polynomial.
-  - **C** (Regularization parameter): Controls the trade-off between achieving a low error on training data and a low margin.
-  - **Gamma** (for RBF kernel): Controls the influence of individual data points.
+* Histogram of Oriented Gradients (HOG)
+* SIFT (Scale-Invariant Feature Transform)
+* ORB (Oriented FAST and Rotated BRIEF)
+* Flattened pixel intensities (baseline approach)
 
-## **Testing and Classification:**
+---
 
-- Test the model on the test dataset.
-- The SVM assigns a label to each image based on the decision boundary it learned during training.
+## Dataset Preparation
+
+* Labeled images (Cats / Dogs)
+* Dataset split into:
+  * Training set
+  * Testing set
+
+---
+
+## Support Vector Machine (SVM)
+
+**Training:**
+
+* Uses extracted feature vectors
+* Optimized using hyperparameters:
+
+**Key Parameters:**
+
+* **Kernel:** Linear, RBF, Polynomial
+* **C:** Regularization parameter
+* **Gamma:** Controls influence of data points (RBF kernel)
+
+**Strengths:**
+
+* High accuracy for well-separated data
+* Effective in high-dimensional spaces
+
+**Weaknesses:**
+
+* Sensitive to parameter tuning
+* Slower training for large datasets
+
+---
+
+## K-Nearest Neighbors (KNN) — *New Algorithm*
+
+**How it works:**
+
+* Classifies an image based on the majority class of its  **K nearest neighbors** .
+
+**Key Parameters:**
+
+* **K:** Number of neighbors
+* **Distance metric:** Euclidean (default)
+
+**Strengths:**
+
+* Simple and intuitive
+* No training phase (lazy learning)
+
+**Weaknesses:**
+
+* Slow prediction for large datasets
+* Sensitive to noisy data and feature scaling
+
+---
+
+## Decision Tree (DTree) — *New Algorithm*
+
+**How it works:**
+
+* Builds a tree of decisions based on feature thresholds.
+* Each leaf node represents a class.
+
+**Key Parameters:**
+
+* **Max depth**
+* **Minimum samples per split**
+
+**Strengths:**
+
+* Easy to interpret and visualize
+* Fast inference
+* Handles non-linear decision boundaries
+
+**Weaknesses:**
+
+* Prone to overfitting
+* Less stable with noisy data
+
+---
+
+## Testing and Prediction
+
+* Models are evaluated on the test dataset
+* The trained model predicts whether the input image is:
+  * **Cat**
+  * **Dog**
+
+---
+
+## Summary of Supported Algorithms
+
+| Task                 | Algorithms                |
+| -------------------- | ------------------------- |
+| Noise Reduction      | Median, Gaussian, Average |
+| Image Classification | SVM, KNN, Decision Tree   |

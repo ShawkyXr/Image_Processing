@@ -1,5 +1,9 @@
 numpy
 tkinter
+customtkinter
 sklearn
 opencv-python
 matplotlib
+cv2
+pickle
+PIL
