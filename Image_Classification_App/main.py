@@ -60,9 +60,28 @@ class ImageClassificationApp:
                 font=("JetBrains Mono", 14, "bold")
             ).grid(row=0, column=col, padx=15, pady=10)
 
+        # ---------------- Model Selection Checkboxes ----------------
+        self.checkbox_frame = ctk.CTkFrame(self.content, fg_color="transparent")
+        self.checkbox_frame.grid(row=3, column=0, columnspan=2, pady=10)
+        
+        self.available_models = ["SVM", "KNN", "Tree", "CNN", "RNN"]
+        self.model_vars = {}
+        
+        for i, model_name in enumerate(self.available_models):
+            var = ctk.StringVar(value=model_name)
+            cb = ctk.CTkCheckBox(
+                self.checkbox_frame, 
+                text=model_name,
+                variable=var,
+                onvalue=model_name,
+                offvalue=""
+            )
+            cb.grid(row=0, column=i, padx=10)
+            self.model_vars[model_name] = var
+
         # ---------------- Buttons (CENTERED UNDER TABLE) ----------------
         self.button_frame = ctk.CTkFrame(self.content, fg_color="transparent")
-        self.button_frame.grid(row=3, column=0, columnspan=2, pady=40)
+        self.button_frame.grid(row=4, column=0, columnspan=2, pady=20)
 
         self.bt_select = ctk.CTkButton(
             self.button_frame,
@@ -120,8 +139,15 @@ class ImageClassificationApp:
             return
 
         try:
+            selected_models = [name for name, var in self.model_vars.items() if var.get() != ""]
+            
+            if not selected_models:
+                print("No models selected.")
+                return
+
             results = Prediction.predict_image_all_models(
-                self.selected_image_path
+                self.selected_image_path,
+                selected_models=selected_models
             )
 
             # Clear previous rows

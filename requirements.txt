@@ -3,3 +3,5 @@ tkinter
 sklearn
 opencv-python
 matplotlib
+torch
+torchvision
