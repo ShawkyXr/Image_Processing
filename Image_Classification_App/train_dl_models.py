@@ -6,7 +6,8 @@ import os
 import cv2
 import numpy as np
 
-from dl_models import CNNModel, RNNModel
+from cnn_model import CNNModel
+from rnn_model import RNNModel
 
 categories = ['cats', 'dogs']
 

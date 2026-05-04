@@ -92,7 +92,8 @@ def predict_image_all_models(image_path, selected_models=None):
         
     try:
         import torch
-        from dl_models import CNNModel, RNNModel
+        from cnn_model import CNNModel
+        from rnn_model import RNNModel
         
         # Load DL test data
         X_test_dl = X_test_ml.reshape(-1, 50, 50) # assuming X_test_ml was flattened
